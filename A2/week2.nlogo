@@ -28,7 +28,7 @@ end
 
 ;; make the model run
 to go
-  if not any? sheep [
+  if ( not any? sheep ) or ( not any? patches with [ grass-amount > 0 ] ) [
     stop
   ]
   ask sheep [
@@ -46,7 +46,7 @@ end
 
 ;; check to see if this sheep has enough energy to reproduce
 to reproduce
-  if energy > 200 [
+  if ( energy > 200 ) and ( self-reproduction ) [
     set energy energy - 100  ;; reproduction transfers energy
     hatch 1 [ set energy 100 ] ;; to the new agent
   ]
@@ -92,17 +92,24 @@ to pick-target
       set temp true
     ]
   ]
-  if temp = true [
-    let moon patches with [ grass-amount > 0 ]
-    set target min-one-of moon [ distance myself ]
+  if ( temp = true ) [
+    if any? patches with [ grass-amount > 0 ] [
+      let moon patches with [ grass-amount > 0 ]
+      set target min-one-of moon [ distance myself ]
+    ]
   ]
   face target
 end
 
 ;; sheep procedure, the sheep moves which costs it energy
 to move
-  forward 1
-  set energy energy - movement-cost ;; reduce the energy by the cost of movement
+  ifelse ( patch-here = target ) and ( grass-amount > 0 ) [
+    forward 0
+  ]
+  [
+    forward 1
+    set energy energy - movement-cost ;; reduce the energy by the cost of movement
+  ]
 end
 
 
@@ -255,7 +262,7 @@ SWITCH
 448
 Self-Reproduction
 Self-Reproduction
-1
+0
 1
 -1000
 
