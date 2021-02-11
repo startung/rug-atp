@@ -1,26 +1,26 @@
 breed [ probes a-probes ]
 
-turtles-own [ energy target ]  ;; agents own energy
+turtles-own [ energy target ] ;; agents own energy
 
-patches-own [ grass-amount ]  ;; patches have grass
+patches-own [ moon-amount ]   ;; patches have moon
 
-globals [ starting-energy ]
+globals [ starting-energy ]   ;; The total energy held by the probes at setup
 
 ;; this procedures sets up the model
 to setup
   clear-all
   ask patches [
-    ;; give grass to the patches, color it shades of green
+    ;; give moon to the patches, color it shades of grey
     if ( pxcor - x-center ) * ( pxcor - x-center ) + ( pycor - y-center ) * ( pycor - y-center ) < moon-size * moon-size [
-        set grass-amount 10.0                  ;; Show the moon if within the given radius
+        set moon-amount 10.0                  ;; Show the moon if within the given radius
     ]
     set starting-energy number-of-probes * 100
-    recolor-grass ;; change the world green
+    recolor-moon ;; change the world grey
   ]
   create-probes number-of-probes [
     setxy random-xcor random-ycor
     set color white
-    set shape "airplane" ;; This line has been changed from "probes" to "airplane" to better represent the space probess
+    set shape "airplane" ;; This line has been changed from "sheep" to "airplane" to better represent the space probess
     set energy 100
     set target patch-here
   ]
@@ -29,13 +29,13 @@ end
 
 ;; make the model run
 to go
-  if ( not any? probes ) or ( not any? patches with [ grass-amount > 0 ] ) [
+  if ( not any? probes ) or ( not any? patches with [ moon-amount > 0 ] ) [
     stop
   ]
   ask probes [
     pick-target
     move          ;; then step forward
-    eat           ;; probes eat grass
+    eat           ;; probes eat moon
     reproduce     ;; the probes reproduce
   ]
   tick
@@ -49,48 +49,49 @@ to reproduce
   ]
 end
 
-;; recolor the grass to indicate how much has been eaten
-to recolor-grass
-  set pcolor scale-color grey grass-amount 0 20 ;; Changed the colour from green to grey to better represent the moon
+;; recolor the moon to indicate how much has been eaten
+to recolor-moon
+  set pcolor scale-color grey moon-amount 0 20 ;; Changed the colour from grey to grey to better represent the moon
 end
 
-;; probes procedure, probes eat grass
+;; probes procedure, probes eat moon
 to eat
-  ;; check to make sure there is grass here
-  if ( grass-amount >= 0 ) [ ;; Check that their is moon remaining
-    ifelse (grass-amount >= energy-gain-from-grass ) [
-      set energy energy + energy-gain-from-grass ;; increment the probes's energy
-    ;;  set collected-energy collected-energy + energy-gain-from-grass ;; increment the globally harvested energy
-      set grass-amount grass-amount - energy-gain-from-grass ;; decrement the grass
+  ;; check to make sure there is moon here
+  if ( moon-amount >= 0 ) [ ;; Check that their is moon remaining
+    ifelse (moon-amount >= energy-gain-from-moon ) [
+      set energy energy + energy-gain-from-moon ;; increment the probes's energy
+    ;;  set collected-energy collected-energy + energy-gain-from-moon ;; increment the globally harvested energy
+      set moon-amount moon-amount - energy-gain-from-moon ;; decrement the moon
     ] [
-      set energy energy + grass-amount ;; increment the probes's energy
-    ;;  set collected-energy collected-energy + grass-amount ;; increment the globally harvested energy
-      set grass-amount 0 ;; decrement the grass
+      set energy energy + moon-amount ;; increment the probes's energy
+    ;;  set collected-energy collected-energy + moon-amount ;; increment the globally harvested energy
+      set moon-amount 0 ;; decrement the moon
     ]
-    recolor-grass
+    recolor-moon
   ]
 end
 
+;; Sets a target for the probe to aim for
 to pick-target
-  let any-remaining false
+  let any-remaining true ;; boolean value denoting whether there is still moon to eat
   ask target [
-    if grass-amount <= 0 [
-      set any-remaining true
+    if moon-amount <= 0 [
+      set any-remaining false ;; set the boolean check to false if there is no moon left on the current patch
     ]
   ]
-  if ( any-remaining = true ) [
-    if any? patches with [ grass-amount > 0 ] [
-      let moon patches with [ grass-amount > 0 ]
-      set target min-one-of moon [ distance myself ]
+  if ( any-remaining = false ) [
+    if any? patches with [ moon-amount > 0 ] [  ;; Look for patches available to eat
+      let moon patches with [ moon-amount > 0 ]
+      set target min-one-of moon [ distance myself ] ;; Find closest patch
     ]
   ]
-  face target
+  face target ;; Turn towards the target patch
 end
 
 ;; probes procedure, the probes moves which costs it energy
 to move
   ;; probes needs to check it is at the target and if so there is moon to harvest
-  ifelse ( patch-here = target ) and ( grass-amount > 0 ) [
+  ifelse ( patch-here = target ) and ( moon-amount > 0 ) [
     forward 0
   ] [ ;; probes needs to move toward target
     forward 1
@@ -200,8 +201,8 @@ SLIDER
 115
 245
 148
-energy-gain-from-grass
-energy-gain-from-grass
+energy-gain-from-moon
+energy-gain-from-moon
 0
 2.0
 2.0
