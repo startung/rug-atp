@@ -80,6 +80,7 @@ to eat
   ]
 end
 
+
 ;; update the plots in the interface tab
 to my-update-plots
   plot count sheep
