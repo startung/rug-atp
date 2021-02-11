@@ -190,7 +190,7 @@ number-of-probes
 number-of-probes
 0
 50
-2.0
+1.0
 1
 1
 NIL
@@ -231,7 +231,7 @@ moon-size
 moon-size
 5
 15
-5.0
+15.0
 0.5
 1
 NIL
@@ -279,7 +279,7 @@ x-center
 x-center
 min-pxcor
 max-pxcor
-0.0
+1.0
 1
 1
 NIL
@@ -294,7 +294,7 @@ y-center
 y-center
 min-pycor
 max-pycor
-0.0
+6.0
 1
 1
 NIL
