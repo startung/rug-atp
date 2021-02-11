@@ -59,15 +59,15 @@ to recolor-grass
 end
 
 ;; regrow the grass ;; This has been commented out to prevent the moon from regrowing
-to regrow-grass
-  ask patches [
-    set grass-amount grass-amount + grass-regrowth-rate
-    if grass-amount > 10.0 [
-      set grass-amount 10.0
-    ]
-    recolor-grass
-  ]
-end
+;;to regrow-grass
+;;  ask patches [
+;;    set grass-amount grass-amount + grass-regrowth-rate
+;;    if grass-amount > 10.0 [
+;;      set grass-amount 10.0
+;;    ]
+;;    recolor-grass
+;;  ]
+;;end
 
 ;; sheep procedure, sheep eat grass
 to eat
@@ -79,9 +79,6 @@ to eat
     set collected-energy collected-energy + energy-gain-from-grass
     set grass-amount grass-amount - energy-gain-from-grass
     recolor-grass
-  ]
-  ;;if ( cannibalism ) and ( any? sheep-here with who not = who of myself )  [
-
   ]
 end
 
@@ -144,10 +141,10 @@ ticks
 30.0
 
 BUTTON
-50
-55
-116
-88
+35
+45
+140
+78
 setup
 setup
 NIL
@@ -161,10 +158,10 @@ NIL
 1
 
 BUTTON
-120
-55
-183
-88
+140
+45
+245
+78
 go
 go
 T
@@ -178,10 +175,10 @@ NIL
 0
 
 PLOT
-5
-215
-240
-365
+35
+220
+245
+370
 Population over Time
 Time
 Population
@@ -196,10 +193,10 @@ PENS
 "default" 1.0 0 -16777216 true "" "  plot count sheep"
 
 SLIDER
-28
-16
-206
-49
+35
+10
+245
+43
 number-of-sheep
 number-of-sheep
 0
@@ -211,40 +208,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-15
-95
-225
-128
-movement-cost
-movement-cost
-0
-2.0
-1.0
-0.1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-15
-135
-225
-168
-grass-regrowth-rate
-grass-regrowth-rate
-0
-2.0
-1.0
-0.1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-15
-175
-225
-208
+35
+115
+245
+148
 energy-gain-from-grass
 energy-gain-from-grass
 0
@@ -256,10 +223,10 @@ NIL
 HORIZONTAL
 
 SWITCH
-15
-540
-195
-573
+35
+150
+245
+183
 Self-Reproduction
 Self-Reproduction
 0
@@ -267,25 +234,25 @@ Self-Reproduction
 -1000
 
 SLIDER
-420
-480
-595
-513
+35
+185
+245
+218
 moon-size
 moon-size
 5
 15
-12.5
+10.0
 0.5
 1
 NIL
 HORIZONTAL
 
 PLOT
-5
-370
-240
-530
+35
+375
+245
+535
 Moon Energy Collected
 Time
 Energy Collected
@@ -300,10 +267,10 @@ PENS
 "pen-0" 1.0 0 -7500403 true "" "plot collected-energy"
 
 SLIDER
-7
-580
-197
-613
+35
+80
+245
+113
 reproduction-energy
 reproduction-energy
 150
@@ -314,17 +281,6 @@ reproduction-energy
 NIL
 HORIZONTAL
 
-SWITCH
-200
-540
-375
-573
-cannibalism
-cannibalism
-1
-1
--1000
-
 SLIDER
 300
 445
@@ -334,7 +290,7 @@ x-center
 x-center
 min-pxcor
 max-pxcor
-9.0
+-9.0
 1
 1
 NIL
