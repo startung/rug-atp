@@ -5,15 +5,17 @@ turtles-own [ energy target ]  ;; agents own energy
 
 patches-own [ grass-amount ]  ;; patches have grass
 
+globals [ collected-energy ]
+
 ;; this procedures sets up the model
 to setup
   clear-all
   ask patches [
     ;; give grass to the patches, color it shades of green
-    if pxcor * pxcor + pycor * pycor < 225 [   ;; Check if a block is within the radius (15)
+    if pxcor * pxcor + pycor * pycor < moon-size * moon-size [   ;; Check if a block is within the radius (15)
         set grass-amount 10.0                  ;; Show the moon if within the given radius
     ]
-
+    set collected-energy 0
     recolor-grass ;; change the world green
   ]
   create-sheep number-of-sheep [
@@ -41,12 +43,11 @@ to go
   ]
 ;;  regrow-grass    ;; the grass grows back
   tick
-  my-update-plots ;; plot the population counts
 end
 
 ;; check to see if this sheep has enough energy to reproduce
 to reproduce
-  if ( energy > 200 ) and ( self-reproduction ) [
+  if ( energy > reproduction-energy ) and ( self-reproduction ) [
     set energy energy - 100  ;; reproduction transfers energy
     hatch 1 [ set energy 100 ] ;; to the new agent
   ]
@@ -75,15 +76,12 @@ to eat
     ;; increment the sheep's energy
     set energy energy + energy-gain-from-grass
     ;; decrement the grass
+    set collected-energy collected-energy + energy-gain-from-grass
     set grass-amount grass-amount - energy-gain-from-grass
     recolor-grass
   ]
 end
 
-;; update the plots in the interface tab
-to my-update-plots
-  plot count sheep
-end
 
 to pick-target
   let temp false
@@ -193,7 +191,7 @@ true
 false
 "" ""
 PENS
-"default" 1.0 0 -16777216 true "" ""
+"default" 1.0 0 -16777216 true "" "  plot count sheep"
 
 SLIDER
 53
@@ -256,15 +254,63 @@ NIL
 HORIZONTAL
 
 SWITCH
-35
-415
-202
-448
+485
+455
+665
+488
 Self-Reproduction
 Self-Reproduction
 0
 1
 -1000
+
+SLIDER
+300
+455
+472
+488
+moon-size
+moon-size
+5
+15
+13.5
+0.5
+1
+NIL
+HORIZONTAL
+
+PLOT
+35
+405
+270
+565
+Moon Energy Collected
+Time
+Energy Collected
+0.0
+50.0
+0.0
+100.0
+true
+false
+"" ""
+PENS
+"pen-0" 1.0 0 -7500403 true "" "plot collected-energy"
+
+SLIDER
+485
+495
+667
+528
+reproduction-energy
+reproduction-energy
+150
+500
+200.0
+5
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## ACKNOWLEDGMENT

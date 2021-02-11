@@ -5,15 +5,17 @@ turtles-own [ energy target ]  ;; agents own energy
 
 patches-own [ grass-amount ]  ;; patches have grass
 
+globals [ collected-energy ]
+
 ;; this procedures sets up the model
 to setup
   clear-all
   ask patches [
     ;; give grass to the patches, color it shades of green
-    if pxcor * pxcor + pycor * pycor < 225 [   ;; Check if a block is within the radius (15)
+    if ( pxcor - x-center ) * ( pxcor - x-center ) + ( pycor - y-center ) * ( pycor  < moon-size * moon-size [
         set grass-amount 10.0                  ;; Show the moon if within the given radius
     ]
-
+    set collected-energy 0
     recolor-grass ;; change the world green
   ]
   create-sheep number-of-sheep [
@@ -41,12 +43,11 @@ to go
   ]
 ;;  regrow-grass    ;; the grass grows back
   tick
-  my-update-plots ;; plot the population counts
 end
 
 ;; check to see if this sheep has enough energy to reproduce
 to reproduce
-  if ( energy > 200 ) and ( self-reproduction ) [
+  if ( energy > reproduction-energy ) and ( self-reproduction ) [
     set energy energy - 100  ;; reproduction transfers energy
     hatch 1 [ set energy 100 ] ;; to the new agent
   ]
@@ -75,14 +76,10 @@ to eat
     ;; increment the sheep's energy
     set energy energy + energy-gain-from-grass
     ;; decrement the grass
+    set collected-energy collected-energy + energy-gain-from-grass
     set grass-amount grass-amount - energy-gain-from-grass
     recolor-grass
   ]
-end
-
-;; update the plots in the interface tab
-to my-update-plots
-  plot count sheep
 end
 
 to pick-target
@@ -103,9 +100,13 @@ end
 
 ;; sheep procedure, the sheep moves which costs it energy
 to move
-
-  forward 1
-  set energy energy - movement-cost ;; reduce the energy by the cost of movement
+  ifelse ( patch-here = target ) and ( grass-amount > 0 ) [
+    forward 0
+  ]
+  [
+    forward 1
+;;    set energy energy - movement-cost ;; reduce the energy by the cost of movement
+  ]
 end
 
 
@@ -140,10 +141,10 @@ ticks
 30.0
 
 BUTTON
-35
-80
-101
-113
+10
+85
+76
+118
 setup
 setup
 NIL
@@ -157,10 +158,10 @@ NIL
 1
 
 BUTTON
-180
-80
-243
-113
+155
+85
+218
+118
 go
 go
 T
@@ -174,10 +175,10 @@ NIL
 0
 
 PLOT
-35
-250
-270
-400
+10
+255
+245
+405
 Population over Time
 Time
 Population
@@ -189,13 +190,13 @@ true
 false
 "" ""
 PENS
-"default" 1.0 0 -16777216 true "" ""
+"default" 1.0 0 -16777216 true "" "  plot count sheep"
 
 SLIDER
-53
-11
-231
-44
+28
+16
+206
+49
 number-of-sheep
 number-of-sheep
 0
@@ -207,10 +208,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-35
-120
-245
-153
+10
+125
+220
+158
 movement-cost
 movement-cost
 0
@@ -222,10 +223,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-35
-160
-245
-193
+10
+165
+220
+198
 grass-regrowth-rate
 grass-regrowth-rate
 0
@@ -237,10 +238,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-35
-200
-245
-233
+10
+205
+220
+238
 energy-gain-from-grass
 energy-gain-from-grass
 0
@@ -252,15 +253,104 @@ NIL
 HORIZONTAL
 
 SWITCH
-35
-415
-202
-448
+275
+515
+455
+548
 Self-Reproduction
 Self-Reproduction
 0
 1
 -1000
+
+SLIDER
+470
+515
+645
+548
+moon-size
+moon-size
+5
+15
+5.0
+0.5
+1
+NIL
+HORIZONTAL
+
+PLOT
+10
+410
+245
+570
+Moon Energy Collected
+Time
+Energy Collected
+0.0
+50.0
+0.0
+100.0
+true
+false
+"" ""
+PENS
+"pen-0" 1.0 0 -7500403 true "" "plot collected-energy"
+
+SLIDER
+267
+555
+457
+588
+reproduction-energy
+reproduction-energy
+150
+500
+500.0
+5
+1
+NIL
+HORIZONTAL
+
+SWITCH
+470
+555
+645
+588
+cannibalism
+cannibalism
+1
+1
+-1000
+
+SLIDER
+300
+445
+730
+478
+x-center
+x-center
+min-pxcor
+max-pxcor
+-1.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+260
+10
+297
+440
+y-center
+y-center
+min-pycor
+max-pycor
+0.0
+1
+1
+NIL
+VERTICAL
 
 @#$#@#$#@
 ## ACKNOWLEDGMENT
