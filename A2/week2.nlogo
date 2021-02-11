@@ -59,30 +59,26 @@ to eat
   ;; check to make sure there is grass here
   if ( grass-amount >= 0 ) [ ;; Check that their is moon remaining
     ifelse (grass-amount >= energy-gain-from-grass ) [
-      ;; increment the sheep's energy
-      set energy energy + energy-gain-from-grass
-      ;; decrement the grass
-      set collected-energy collected-energy + energy-gain-from-grass
-      set grass-amount grass-amount - energy-gain-from-grass
+      set energy energy + energy-gain-from-grass ;; increment the sheep's energy
+      set collected-energy collected-energy + energy-gain-from-grass ;; increment the globally harvested energy
+      set grass-amount grass-amount - energy-gain-from-grass ;; decrement the grass
     ] [
-      ;; increment the sheep's energy
-      set energy energy + grass-amount
-      ;; decrement the grass
-      set collected-energy collected-energy + grass-amount
-      set grass-amount 0
+      set energy energy + grass-amount ;; increment the sheep's energy
+      set collected-energy collected-energy + grass-amount ;; increment the globally harvested energy
+      set grass-amount 0 ;; decrement the grass
     ]
     recolor-grass
   ]
 end
 
 to pick-target
-  let temp false
+  let any-remaining false
   ask target [
     if grass-amount <= 0 [
-      set temp true
+      set any-remaining true
     ]
   ]
-  if ( temp = true ) [
+  if ( any-remaining = true ) [
     if any? patches with [ grass-amount > 0 ] [
       let moon patches with [ grass-amount > 0 ]
       set target min-one-of moon [ distance myself ]
@@ -93,12 +89,11 @@ end
 
 ;; sheep procedure, the sheep moves which costs it energy
 to move
+  ;; probe needs to check it is at the target and if so there is moon to harvest
   ifelse ( patch-here = target ) and ( grass-amount > 0 ) [
     forward 0
-  ]
-  [
+  ] [ ;; probe needs to move toward target
     forward 1
-;;    set energy energy - movement-cost ;; reduce the energy by the cost of movement
   ]
 end
 
