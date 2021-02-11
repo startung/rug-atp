@@ -57,12 +57,20 @@ end
 ;; sheep procedure, sheep eat grass
 to eat
   ;; check to make sure there is grass here
-  if ( grass-amount >= energy-gain-from-grass ) [ ;; Check that the energy taken cannot excede the energy present
-    ;; increment the sheep's energy
-    set energy energy + energy-gain-from-grass
-    ;; decrement the grass
-    set collected-energy collected-energy + energy-gain-from-grass
-    set grass-amount grass-amount - energy-gain-from-grass
+  if ( grass-amount >= 0 ) [ ;; Check that their is moon remaining
+    ifelse (grass-amount >= energy-gain-from-grass ) [
+      ;; increment the sheep's energy
+      set energy energy + energy-gain-from-grass
+      ;; decrement the grass
+      set collected-energy collected-energy + energy-gain-from-grass
+      set grass-amount grass-amount - energy-gain-from-grass
+    ] [
+      ;; increment the sheep's energy
+      set energy energy + grass-amount
+      ;; decrement the grass
+      set collected-energy collected-energy + grass-amount
+      set grass-amount 0
+    ]
     recolor-grass
   ]
 end
@@ -201,7 +209,7 @@ energy-gain-from-grass
 energy-gain-from-grass
 0
 2.0
-2.0
+1.7
 0.1
 1
 NIL
