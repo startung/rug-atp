@@ -12,7 +12,7 @@ to setup
   clear-all
   ask patches [
     ;; give grass to the patches, color it shades of green
-    if ( pxcor - x-center ) * ( pxcor - x-center ) + ( pycor - y-center ) * ( pycor  < moon-size * moon-size [
+    if ( pxcor - x-center ) * ( pxcor - x-center ) + ( pycor - y-center ) * ( pycor - y-center ) < moon-size * moon-size [
         set grass-amount 10.0                  ;; Show the moon if within the given radius
     ]
     set collected-energy 0
@@ -80,6 +80,9 @@ to eat
     set grass-amount grass-amount - energy-gain-from-grass
     recolor-grass
   ]
+  if ( cannibalism ) and (  who = who of myself )  [
+
+  ]
 end
 
 to pick-target
@@ -141,10 +144,10 @@ ticks
 30.0
 
 BUTTON
-10
-85
-76
-118
+50
+55
+116
+88
 setup
 setup
 NIL
@@ -158,10 +161,10 @@ NIL
 1
 
 BUTTON
-155
-85
-218
-118
+120
+55
+183
+88
 go
 go
 T
@@ -175,10 +178,10 @@ NIL
 0
 
 PLOT
-10
-255
-245
-405
+5
+215
+240
+365
 Population over Time
 Time
 Population
@@ -208,10 +211,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-10
-125
-220
-158
+15
+95
+225
+128
 movement-cost
 movement-cost
 0
@@ -223,10 +226,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-10
-165
-220
-198
+15
+135
+225
+168
 grass-regrowth-rate
 grass-regrowth-rate
 0
@@ -238,10 +241,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-10
-205
-220
-238
+15
+175
+225
+208
 energy-gain-from-grass
 energy-gain-from-grass
 0
@@ -253,10 +256,10 @@ NIL
 HORIZONTAL
 
 SWITCH
-275
-515
-455
-548
+15
+540
+195
+573
 Self-Reproduction
 Self-Reproduction
 0
@@ -264,25 +267,25 @@ Self-Reproduction
 -1000
 
 SLIDER
-470
-515
-645
-548
+420
+480
+595
+513
 moon-size
 moon-size
 5
 15
-5.0
+12.5
 0.5
 1
 NIL
 HORIZONTAL
 
 PLOT
-10
-410
-245
-570
+5
+370
+240
+530
 Moon Energy Collected
 Time
 Energy Collected
@@ -297,10 +300,10 @@ PENS
 "pen-0" 1.0 0 -7500403 true "" "plot collected-energy"
 
 SLIDER
-267
-555
-457
-588
+7
+580
+197
+613
 reproduction-energy
 reproduction-energy
 150
@@ -312,10 +315,10 @@ NIL
 HORIZONTAL
 
 SWITCH
-470
-555
-645
-588
+200
+540
+375
+573
 cannibalism
 cannibalism
 1
@@ -331,7 +334,7 @@ x-center
 x-center
 min-pxcor
 max-pxcor
--1.0
+9.0
 1
 1
 NIL
@@ -346,7 +349,7 @@ y-center
 y-center
 min-pycor
 max-pycor
-0.0
+8.0
 1
 1
 NIL

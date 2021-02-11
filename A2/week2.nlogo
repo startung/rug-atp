@@ -12,7 +12,7 @@ to setup
   clear-all
   ask patches [
     ;; give grass to the patches, color it shades of green
-    if pxcor * pxcor + pycor * pycor < moon-size * moon-size [   ;; Check if a block is within the radius (15)
+    if ( pxcor - x-center ) * ( pxcor - x-center ) + ( pycor - y-center ) * ( pycor - y-center ) < moon-size * moon-size [
         set grass-amount 10.0                  ;; Show the moon if within the given radius
     ]
     set collected-energy 0
@@ -80,8 +80,10 @@ to eat
     set grass-amount grass-amount - energy-gain-from-grass
     recolor-grass
   ]
-end
+  ;;if ( cannibalism ) and ( any? sheep-here with who not = who of myself )  [
 
+  ]
+end
 
 to pick-target
   let temp false
@@ -106,7 +108,7 @@ to move
   ]
   [
     forward 1
-    set energy energy - movement-cost ;; reduce the energy by the cost of movement
+;;    set energy energy - movement-cost ;; reduce the energy by the cost of movement
   ]
 end
 
@@ -142,10 +144,10 @@ ticks
 30.0
 
 BUTTON
-35
-80
-101
-113
+50
+55
+116
+88
 setup
 setup
 NIL
@@ -159,10 +161,10 @@ NIL
 1
 
 BUTTON
-180
-80
-243
-113
+120
+55
+183
+88
 go
 go
 T
@@ -176,10 +178,10 @@ NIL
 0
 
 PLOT
-35
-250
-270
-400
+5
+215
+240
+365
 Population over Time
 Time
 Population
@@ -194,10 +196,10 @@ PENS
 "default" 1.0 0 -16777216 true "" "  plot count sheep"
 
 SLIDER
-53
-11
-231
-44
+28
+16
+206
+49
 number-of-sheep
 number-of-sheep
 0
@@ -209,10 +211,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-35
-120
-245
-153
+15
+95
+225
+128
 movement-cost
 movement-cost
 0
@@ -224,10 +226,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-35
-160
-245
-193
+15
+135
+225
+168
 grass-regrowth-rate
 grass-regrowth-rate
 0
@@ -239,10 +241,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-35
-200
-245
-233
+15
+175
+225
+208
 energy-gain-from-grass
 energy-gain-from-grass
 0
@@ -254,10 +256,10 @@ NIL
 HORIZONTAL
 
 SWITCH
-485
-455
-665
-488
+15
+540
+195
+573
 Self-Reproduction
 Self-Reproduction
 0
@@ -265,25 +267,25 @@ Self-Reproduction
 -1000
 
 SLIDER
-300
-455
-472
-488
+420
+480
+595
+513
 moon-size
 moon-size
 5
 15
-13.5
+12.5
 0.5
 1
 NIL
 HORIZONTAL
 
 PLOT
-35
-405
-270
-565
+5
+370
+240
+530
 Moon Energy Collected
 Time
 Energy Collected
@@ -298,19 +300,60 @@ PENS
 "pen-0" 1.0 0 -7500403 true "" "plot collected-energy"
 
 SLIDER
-485
-495
-667
-528
+7
+580
+197
+613
 reproduction-energy
 reproduction-energy
 150
 500
-200.0
+500.0
 5
 1
 NIL
 HORIZONTAL
+
+SWITCH
+200
+540
+375
+573
+cannibalism
+cannibalism
+1
+1
+-1000
+
+SLIDER
+300
+445
+730
+478
+x-center
+x-center
+min-pxcor
+max-pxcor
+9.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+260
+10
+297
+440
+y-center
+y-center
+min-pycor
+max-pycor
+8.0
+1
+1
+NIL
+VERTICAL
 
 @#$#@#$#@
 ## ACKNOWLEDGMENT
