@@ -1,10 +1,10 @@
-breed [ sheep a-sheep ]
+breed [ probes a-probes ]
 
 turtles-own [ energy target ]  ;; agents own energy
 
 patches-own [ grass-amount ]  ;; patches have grass
 
-globals [ collected-energy ]
+globals [ starting-energy ]
 
 ;; this procedures sets up the model
 to setup
@@ -14,13 +14,13 @@ to setup
     if ( pxcor - x-center ) * ( pxcor - x-center ) + ( pycor - y-center ) * ( pycor - y-center ) < moon-size * moon-size [
         set grass-amount 10.0                  ;; Show the moon if within the given radius
     ]
-    set collected-energy 0
+    set starting-energy number-of-probes * 100
     recolor-grass ;; change the world green
   ]
-  create-sheep number-of-sheep [
+  create-probes number-of-probes [
     setxy random-xcor random-ycor
     set color white
-    set shape "airplane" ;; This line has been changed from "sheep" to "airplane" to better represent the space probes
+    set shape "airplane" ;; This line has been changed from "probes" to "airplane" to better represent the space probess
     set energy 100
     set target patch-here
   ]
@@ -29,19 +29,19 @@ end
 
 ;; make the model run
 to go
-  if ( not any? sheep ) or ( not any? patches with [ grass-amount > 0 ] ) [
+  if ( not any? probes ) or ( not any? patches with [ grass-amount > 0 ] ) [
     stop
   ]
-  ask sheep [
+  ask probes [
     pick-target
     move          ;; then step forward
-    eat           ;; sheep eat grass
-    reproduce     ;; the sheep reproduce
+    eat           ;; probes eat grass
+    reproduce     ;; the probes reproduce
   ]
   tick
 end
 
-;; check to see if this sheep has enough energy to reproduce
+;; check to see if this probes has enough energy to reproduce
 to reproduce
   if ( energy > reproduction-energy ) and ( self-reproduction ) [
     set energy energy - 100  ;; reproduction transfers energy
@@ -54,17 +54,17 @@ to recolor-grass
   set pcolor scale-color grey grass-amount 0 20 ;; Changed the colour from green to grey to better represent the moon
 end
 
-;; sheep procedure, sheep eat grass
+;; probes procedure, probes eat grass
 to eat
   ;; check to make sure there is grass here
   if ( grass-amount >= 0 ) [ ;; Check that their is moon remaining
     ifelse (grass-amount >= energy-gain-from-grass ) [
-      set energy energy + energy-gain-from-grass ;; increment the sheep's energy
-      set collected-energy collected-energy + energy-gain-from-grass ;; increment the globally harvested energy
+      set energy energy + energy-gain-from-grass ;; increment the probes's energy
+    ;;  set collected-energy collected-energy + energy-gain-from-grass ;; increment the globally harvested energy
       set grass-amount grass-amount - energy-gain-from-grass ;; decrement the grass
     ] [
-      set energy energy + grass-amount ;; increment the sheep's energy
-      set collected-energy collected-energy + grass-amount ;; increment the globally harvested energy
+      set energy energy + grass-amount ;; increment the probes's energy
+    ;;  set collected-energy collected-energy + grass-amount ;; increment the globally harvested energy
       set grass-amount 0 ;; decrement the grass
     ]
     recolor-grass
@@ -87,12 +87,12 @@ to pick-target
   face target
 end
 
-;; sheep procedure, the sheep moves which costs it energy
+;; probes procedure, the probes moves which costs it energy
 to move
-  ;; probe needs to check it is at the target and if so there is moon to harvest
+  ;; probes needs to check it is at the target and if so there is moon to harvest
   ifelse ( patch-here = target ) and ( grass-amount > 0 ) [
     forward 0
-  ] [ ;; probe needs to move toward target
+  ] [ ;; probes needs to move toward target
     forward 1
   ]
 end
@@ -178,18 +178,18 @@ true
 false
 "" ""
 PENS
-"default" 1.0 0 -16777216 true "" "  plot count sheep"
+"default" 1.0 0 -16777216 true "" "  plot count probes"
 
 SLIDER
 35
 10
 245
 43
-number-of-sheep
-number-of-sheep
+number-of-probes
+number-of-probes
 0
 50
-1.0
+2.0
 1
 1
 NIL
@@ -204,7 +204,7 @@ energy-gain-from-grass
 energy-gain-from-grass
 0
 2.0
-1.7
+2.0
 0.1
 1
 NIL
@@ -217,7 +217,7 @@ SWITCH
 183
 Self-Reproduction
 Self-Reproduction
-0
+1
 1
 -1000
 
@@ -230,7 +230,7 @@ moon-size
 moon-size
 5
 15
-10.0
+5.0
 0.5
 1
 NIL
@@ -252,7 +252,7 @@ true
 false
 "" ""
 PENS
-"pen-0" 1.0 0 -7500403 true "" "plot collected-energy"
+"pen-0" 1.0 0 -7500403 true "" "plot sum [ energy ] of probes - starting-energy"
 
 SLIDER
 35
@@ -285,9 +285,9 @@ NIL
 HORIZONTAL
 
 SLIDER
-260
+265
 10
-293
+298
 440
 y-center
 y-center
