@@ -1,7 +1,6 @@
 breed [ sheep a-sheep ]
 
 turtles-own [ energy target ]  ;; agents own energy
-;;turtles-own [ target ]  ;; agents have a current target
 
 patches-own [ grass-amount ]  ;; patches have grass
 
@@ -58,6 +57,17 @@ to recolor-grass
   set pcolor scale-color grey grass-amount 0 20 ;; Changed the colour from green to grey to better represent the moon
 end
 
+;; regrow the grass ;; This has been commented out to prevent the moon from regrowing
+;;to regrow-grass
+;;  ask patches [
+;;    set grass-amount grass-amount + grass-regrowth-rate
+;;    if grass-amount > 10.0 [
+;;      set grass-amount 10.0
+;;    ]
+;;    recolor-grass
+;;  ]
+;;end
+
 ;; sheep procedure, sheep eat grass
 to eat
   ;; check to make sure there is grass here
@@ -94,7 +104,7 @@ to move
   ]
   [
     forward 1
-
+;;    set energy energy - movement-cost ;; reduce the energy by the cost of movement
   ]
 end
 
@@ -288,7 +298,7 @@ HORIZONTAL
 SLIDER
 260
 10
-297
+293
 440
 y-center
 y-center
