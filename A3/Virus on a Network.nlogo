@@ -9,7 +9,7 @@ turtles-own
 ]
 
 to setup
-  random-seed 6
+;;  random-seed 6
   set unique-infections 0
   clear-all
   setup-nodes
@@ -235,7 +235,7 @@ PENS
 "susceptible" 1.0 0 -13345367 true "" "plot (count turtles with [not infected? and not resistant?]) / (count turtles) * 100"
 "infected" 1.0 0 -2674135 true "" "plot (count turtles with [infected?]) / (count turtles) * 100"
 "resistant" 1.0 0 -7500403 true "" "plot (count turtles with [resistant?]) / (count turtles) * 100"
-"percentage infected" 1.0 0 -955883 true "" "plot (unique-infections * 100 / count turtles)"
+"unique infections" 1.0 0 -11085214 true "" "plot (unique-infections * 100 / count turtles)"
 
 SLIDER
 25
@@ -276,7 +276,7 @@ initial-outbreak-size
 initial-outbreak-size
 1
 number-of-nodes
-1.0
+3.0
 1
 1
 NIL
@@ -298,9 +298,9 @@ NIL
 HORIZONTAL
 
 MONITOR
-69
+5
 495
-190
+259
 540
 Unique Infections
 unique-infections
@@ -676,6 +676,32 @@ NetLogo 6.2.0
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
+<experiments>
+  <experiment name="experiment" repetitions="100" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <metric>count unique-infections</metric>
+    <enumeratedValueSet variable="number-of-nodes">
+      <value value="150"/>
+    </enumeratedValueSet>
+    <steppedValueSet variable="initial-outbreak-size" first="2" step="1" last="7"/>
+    <enumeratedValueSet variable="gain-resistance-chance">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="virus-check-frequency">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="average-node-degree">
+      <value value="6"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="virus-spread-chance">
+      <value value="2.5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="recovery-chance">
+      <value value="5"/>
+    </enumeratedValueSet>
+  </experiment>
+</experiments>
 @#$#@#$#@
 @#$#@#$#@
 default
