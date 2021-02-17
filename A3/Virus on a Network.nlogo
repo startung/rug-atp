@@ -235,6 +235,7 @@ PENS
 "susceptible" 1.0 0 -13345367 true "" "plot (count turtles with [not infected? and not resistant?]) / (count turtles) * 100"
 "infected" 1.0 0 -2674135 true "" "plot (count turtles with [infected?]) / (count turtles) * 100"
 "resistant" 1.0 0 -7500403 true "" "plot (count turtles with [resistant?]) / (count turtles) * 100"
+"percentage infected" 1.0 0 -955883 true "" "plot (unique-infections * 100 / count turtles)"
 
 SLIDER
 25
@@ -296,23 +297,16 @@ number-of-nodes - 1
 NIL
 HORIZONTAL
 
-PLOT
-6
-491
-261
-690
-Unique infections over time
-time
+MONITOR
+69
+495
+190
+540
 Unique Infections
-0.0
-10.0
-0.0
-10.0
-true
-false
-"" ""
-PENS
-"default" 1.0 0 -16777216 true "" "plot unique-infections"
+unique-infections
+17
+1
+11
 
 @#$#@#$#@
 ## WHAT IS IT?
